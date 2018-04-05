@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+  message = `see fire. must play.`;
+
+  clear() {
+    console.log(`clear!`);
+
+    this.message = `oops! it's gone`;
+  }
 }

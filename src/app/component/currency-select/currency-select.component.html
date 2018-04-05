@@ -1,0 +1,4 @@
+<div class="outer">
+  <app-switch *ngFor="let currency of currencies" [name]="currency.name" [checked]="currency.checked" (change)="change($event)"></app-switch>
+</div>
+
