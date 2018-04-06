@@ -1,4 +1,4 @@
 <div class="outer">
-  <app-switch *ngFor="let currency of currencies" [name]="currency.name" [checked]="currency.checked" (change)="change($event)"></app-switch>
+  <app-switch *ngFor="let currency of currencies" [name]="currency.code" [checked]="active.has(currency)" (change)="change(currency, $event)"></app-switch>
 </div>
 

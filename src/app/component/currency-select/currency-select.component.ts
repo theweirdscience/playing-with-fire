@@ -1,26 +1,29 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { Logger } from '../../service/logger/logger.service';
+import { Component, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+import { CurrencyService, CurrencyPair, currencies } from '../../service/currency/currency.service';
 
 @Component({
   selector: 'app-currency-select',
   templateUrl: './currency-select.component.html',
   styleUrls: ['./currency-select.component.css'],
-  providers: [ Logger ]
+  providers: [ CurrencyService ]
 })
-export class CurrencySelectComponent implements OnInit {
-  currencies: Set<any> = new Set([
-    { name: 'BTC', checked: false },
-    { name: 'ETH', checked: false },
-    { name: 'XRP', checked: true }
-  ]);
+export class CurrencySelectComponent implements OnDestroy {
+  public currencies: CurrencyPair[] = currencies;
+  public active: Set<CurrencyPair> = new Set();
+  private update$: Subscription;
 
-  constructor(private log: Logger) {}
-
-  ngOnInit() {
+  constructor(private currencyService: CurrencyService) {
+    this.update$  = this.currencyService.activeSetChange$.subscribe((active: Set<CurrencyPair>) => this.active = active);
   }
 
-  change(e) {
-    this.log.info(e);
+  change(currency, value) {
+    value
+        ? this.currencyService.enable(currency)
+        : this.currencyService.disable(currency);
   }
 
+  ngOnDestroy() {
+    this.update$.unsubscribe();
+  }
 }
