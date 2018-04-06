@@ -5,8 +5,7 @@ import { CurrencyService, CurrencyPair, currencies } from '../../service/currenc
 @Component({
   selector: 'app-currency-select',
   templateUrl: './currency-select.component.html',
-  styleUrls: ['./currency-select.component.css'],
-  providers: [ CurrencyService ]
+  styleUrls: ['./currency-select.component.css']
 })
 export class CurrencySelectComponent implements OnDestroy {
   public currencies: CurrencyPair[] = currencies;
@@ -14,7 +13,7 @@ export class CurrencySelectComponent implements OnDestroy {
   private update$: Subscription;
 
   constructor(private currencyService: CurrencyService) {
-    this.update$  = this.currencyService.activeSetChange$.subscribe((active: Set<CurrencyPair>) => this.active = active);
+    this.update$  = this.currencyService.subscribeActiveSetChange$.subscribe((active: Set<CurrencyPair>) => this.active = active);
   }
 
   change(currency, value) {

@@ -1,9 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { FromObservable } from 'rxjs/observable/FromObservable';
-import { PartialObserver } from 'rxjs/Observer';
-import { combineLatest } from 'rxjs/operators';
+import { from } from 'rxjs/observable/from';
+import { tap } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 import { Logger } from '../logger/logger.service';
 
@@ -65,20 +63,18 @@ export const currencies: CurrencyPair[] = [
   new CurrencyPair(ETH, BTC),
 ];
 
-// export const active: Observable.create(new Set<CurrencyPair>());
-
 const activeSymbol = Symbol('active');
 
 @Injectable()
 export class CurrencyService {
 
-  // public subscribeActiveSetChange$: Observable<any>;
-  public activeSetChange$ = new Subject();
+  public subscribeActiveSetChange$: Observable<any>;
+  private activeSetChange$ = new Subject();
 
-  constructor(@Inject(Logger) private log) {
+  constructor(private log: Logger) {
     this[activeSymbol] = new Set<CurrencyPair>([]);
 
-    // this.subscribeActiveSetChange$ = Observable.pipe(combineLatest(this.activeSetChange$));
+    this.subscribeActiveSetChange$ = from(this.activeSetChange$);
   }
 
   public get active(): Set<CurrencyPair> {
@@ -86,17 +82,15 @@ export class CurrencyService {
   }
 
   enable(pair: CurrencyPair) {
-    this.log.info(`enabling ${pair.code}`);
     this.active.add(pair);
 
-    this.activeSetChange$.next(this[activeSymbol]);
+    this.activeSetChange$.next(this.active);
   }
 
   disable(pair: CurrencyPair) {
-    this.log.info(`disabling ${pair.code}`);
     this.active.delete(pair);
 
-    this.activeSetChange$.next(this[activeSymbol]);
+    this.activeSetChange$.next(this.active);
   }
 
 }

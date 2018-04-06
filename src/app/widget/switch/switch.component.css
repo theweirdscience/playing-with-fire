@@ -1,4 +1,5 @@
 .outer {
+  transition: all .3s ease-in-out;
   border: 1px solid #eee;
   display: inline-block;
   border-radius: 5px;
@@ -19,3 +20,4 @@
   background: white;
   border-radius: 2px;
 }
+
