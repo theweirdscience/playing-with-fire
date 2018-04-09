@@ -48,7 +48,7 @@ export class GraphComponent implements OnDestroy, AfterViewInit {
 
     const timer$ = timer(0, 1000).pipe(map(() => new Date()));
     this.timer$ = timer$.subscribe((t) => {
-      this.chart.data.labels.push(t.toLocaleTimeString('en', { year: 'numeric', month: 'short', day: 'numeric' });
+      this.chart.data.labels.push(t.toLocaleTimeString('en', { year: 'numeric', month: 'short', day: 'numeric' }));
       this.prices.forEach((value, key) => value.push(this.latestPrices.get(key)));
       this.chart.data.datasets.forEach((dataset: any, i) => {
         dataset.data.push(this.latestPrices.get(currencies[i].code));

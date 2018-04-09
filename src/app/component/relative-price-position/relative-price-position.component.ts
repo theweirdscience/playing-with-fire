@@ -42,13 +42,10 @@ export class RelativePricePositionComponent implements OnDestroy, AfterViewInit 
       );
 
     this.combinedSubscription$ = combineLatest(dataStream, tradeStream).subscribe((value: any) => {
-      console.log(value);
       const t = new Date();
       this.chart.data.labels.push(t.toLocaleTimeString('en', { year: 'numeric', month: 'short', day: 'numeric' }));
-      let i: any;
-      currencies.forEach((currency, index) => value[0].code === currency.code ? i = index : null );
       this.chart.data.datasets.forEach((dataset: any, index) => {
-        dataset.data.push(index === i ? (value[1] - value[0].bid) / (value[0].ask - value[0].bid) : null);
+        dataset.data.push(currencies[index].code === value[0].code ? (value[0].ask - value[0].bid) / (value[1] - value[0].bid) : null);
       });
       this.chart.update();
     });
@@ -77,7 +74,7 @@ export class RelativePricePositionComponent implements OnDestroy, AfterViewInit 
       },
       options: {
         legend: {
-          display: true,
+          display: false,
           position: 'bottom'
         },
         scales: {
@@ -85,8 +82,12 @@ export class RelativePricePositionComponent implements OnDestroy, AfterViewInit 
             display: false
           }],
           yAxes: [{
-            display: true
+            display: true,
+            ticks: {
+              min: 0,
+            }
           }],
+
         }
       }
     });
