@@ -3,7 +3,7 @@ import { Inject, NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { BitstampService } from './service/bitstamp/bitstamp.service';
-import { CurrencyService } from './service/currency/currency.service';
+import { Currency, CurrencyPair, CurrencyService, ETH, EUR } from './service/currency/currency.service';
 import {Logger} from './service/logger/logger.service';
 import {GraphComponent} from './component/graph/graph.component';
 import {CurrencySelectComponent} from './component/currency-select/currency-select.component';
@@ -29,7 +29,7 @@ import { SwitchComponent } from './widget/switch/switch.component';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(private bitstampService: BitstampService) {
+  constructor(private bitstampService: BitstampService, private currencyService: CurrencyService) {
     this.bitstampService.connect('de504dc5763aeef9ff52');
   }
 }
